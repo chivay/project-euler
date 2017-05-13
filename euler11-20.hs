@@ -53,6 +53,7 @@ problem12 = head ([x | x <- triangulars, divisors x >= 500])
               where toPowers [] n = [ (n, 1)]
                     toPowers ((m, p):ps) n = if m == n then (n, p+1):ps else (n,1):(m,p):ps
 
+-- First 10 digits of sum of given numbers
 problem13 = take 10 $ show $ sum $ map (read::String->Integer) (words numStr)
     where numStr = "37107287533902102798797998220837590246510135740250 \
                  \  46376937677490009712648124896970078050417018260538 \
@@ -155,5 +156,20 @@ problem13 = take 10 $ show $ sum $ map (read::String->Integer) (words numStr)
                  \  20849603980134001723930671666823555245252804609722 \
                  \  53503534226472524250874054075591789781264330331690" 
 
+-- N for longest collatz sequence below 1kk
+problem14 = maximum [ collatz n | n <- [1..10^6]]
+    where collatz n = colHelper 1 n
+              where colHelper l 1 = (l, n)
+                    colHelper l n = if even n then colHelper (l+1) (n `div` 2)
+                                              else colHelper (l+1) (3 * n + 1)
+
+-- Number of ways top left to bottom right in 20x20 grid =  C(2 * 20, 20)
+problem15 = choose (2*20) 20
+    where choose n k = (product [k+1..n]) `div` (product [1..n-k])
+
+problem16 = digsum (2^1000)
+    where digsum 0 = 0
+          digsum n = digsum m + r
+              where (m, r) = divMod n 10
 
 
