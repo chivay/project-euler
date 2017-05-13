@@ -45,3 +45,11 @@ problem11 = maximum (map calcProduct allConfigs)
                    \ 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54\n \
                    \ 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"
 
+-- Frist triangular number with at least 500 divisors
+problem12 = head ([x | x <- triangulars, divisors x >= 500])
+    where triangulars = [n*(n+1) `div` 2 | n <- [1..] ]
+          divisors n = foldl (\acc (_, p) -> acc * (p+1) ) 1 (factorize n)
+          factorize n = foldl toPowers [] (factor n)
+              where toPowers [] n = [ (n, 1)]
+                    toPowers ((m, p):ps) n = if m == n then (n, p+1):ps else (n,1):(m,p):ps
+
