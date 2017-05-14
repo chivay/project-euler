@@ -18,7 +18,7 @@ problem11 = maximum (map calcProduct allConfigs)
           ldConfigs = [ genDiagonal x y | x <- [len - 1..(fst size) - 1], y <- [0..(snd size) - len] ]
               where genDiagonal x y = [ (x-i, y+i) | i <- [0..len - 1] ]
 
-          getValue (x, y) = (grid !! y) !! x 
+          getValue (x, y) = (grid !! y) !! x
           size = (20, 20)
           len = 4
           grid = parseGrid gridStr
@@ -154,7 +154,7 @@ problem13 = take 10 $ show $ sum $ map (read::String->Integer) (words numStr)
                  \  77158542502016545090413245809786882778948721859617 \
                  \  72107838435069186155435662884062257473692284509516 \
                  \  20849603980134001723930671666823555245252804609722 \
-                 \  53503534226472524250874054075591789781264330331690" 
+                 \  53503534226472524250874054075591789781264330331690"
 
 -- N for longest collatz sequence below 1kk
 problem14 = maximum [ collatz n | n <- [1..10^6]]
@@ -172,4 +172,43 @@ problem16 = digsum (2^1000)
           digsum n = digsum m + r
               where (m, r) = divMod n 10
 
+-- Number of letters used to print numbers 1..1000
+problem17 = sum [ (length . spell) n | n <- [1..1000]]
+    where spell  1 = "one"
+          spell  2 = "two"
+          spell  3 = "three"
+          spell  4 = "four"
+          spell  5 = "five"
+          spell  6 = "six"
+          spell  7 = "seven"
+          spell  8 = "eight"
+          spell  9 = "nine"
+          spell 10 = "ten"
+          spell 11 = "eleven"
+          spell 12 = "twelve"
+          spell 13 = "thirteen"
+          spell 14 = "fourteen"
+          spell 15 = "fifteen"
+          spell 16 = "sixteen"
+          spell 17 = "seventeen"
+          spell 18 = "eighteen"
+          spell 19 = "nineteen"
+          spell 20 = "twenty"
+          spell 30 = "thirty"
+          spell 40 = "forty"
+          spell 50 = "fifty"
+          spell 60 = "sixty"
+          spell 70 = "seventy"
+          spell 80 = "eighty"
+          spell 90 = "ninety"
+          spell n
+            | n == 1000 = spell 1 ++ "thousand"
+            | n >= 100 = let (hundreds, mod) = divMod n 100
+                         in spell hundreds ++ "hundred" ++ if mod == 0
+                                                           then ""
+                                                           else "and" ++ spell mod
+            | otherwise = let (tens, mod) = divMod n 10
+                          in spell (n - mod) ++ (if mod == 0
+                                                 then "h"
+                                                 else spell mod)
 
