@@ -6,16 +6,16 @@ problem11 = maximum (map calcProduct allConfigs)
     where calcProduct pairs = product (map getValue pairs)
           allConfigs = hConfigs ++ vConfigs ++ ldConfigs ++ rdConfigs
 
-          hConfigs = [ genHorizontal x y | x <- [0..(fst size) - len], y <- [0..(snd size) - 1] ]
+          hConfigs = [ genHorizontal x y | x <- [0..fst size - len], y <- [0..snd size - 1] ]
               where genHorizontal x y = [ (x+i, y) | i <- [0..len - 1] ]
 
-          vConfigs = [ genVertical x y | x <- [0..(fst size) - 1], y <- [0..(snd size) - len] ]
+          vConfigs = [ genVertical x y | x <- [0..fst size - 1], y <- [0..snd size - len] ]
               where genVertical x y = [ (x, y+i) | i <- [0..len - 1] ]
 
-          rdConfigs = [ genDiagonal x y | x <- [0..(fst size) - len], y <- [0..(snd size) - len] ]
+          rdConfigs = [ genDiagonal x y | x <- [0..fst size - len], y <- [0..snd size - len] ]
               where genDiagonal x y = [ (x+i, y+i) | i <- [0..len - 1] ]
 
-          ldConfigs = [ genDiagonal x y | x <- [len - 1..(fst size) - 1], y <- [0..(snd size) - len] ]
+          ldConfigs = [ genDiagonal x y | x <- [len - 1..fst size - 1], y <- [0..snd size - len] ]
               where genDiagonal x y = [ (x-i, y+i) | i <- [0..len - 1] ]
 
           getValue (x, y) = (grid !! y) !! x
@@ -46,7 +46,7 @@ problem11 = maximum (map calcProduct allConfigs)
                    \ 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"
 
 -- Frist triangular number with at least 500 divisors
-problem12 = head ([x | x <- triangulars, divisors x >= 500])
+problem12 = head [x | x <- triangulars, divisors x >= 500]
     where triangulars = [n*(n+1) `div` 2 | n <- [1..] ]
           divisors n = foldl (\acc (_, p) -> acc * (p+1) ) 1 (factorize n)
           factorize n = foldl toPowers [] (factor n)
@@ -165,7 +165,7 @@ problem14 = maximum [ collatz n | n <- [1..10^6]]
 
 -- Number of ways top left to bottom right in 20x20 grid =  C(2 * 20, 20)
 problem15 = choose (2*20) 20
-    where choose n k = (product [k+1..n]) `div` (product [1..n-k])
+    where choose n k = product [k + 1 .. n] `div` product [1 .. n - k]
 
 problem16 = digsum (2^1000)
     where digsum 0 = 0
