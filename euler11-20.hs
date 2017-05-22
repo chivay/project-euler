@@ -23,7 +23,7 @@ problem11 = maximum (map calcProduct allConfigs)
           len = 4
           grid = parseGrid gridStr
           parseGrid str = map (toInts.words) (lines str)
-              where toInts line = map (read::String->Int) line
+              where toInts = map (read :: String -> Int)
           gridStr = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08\n \
                    \ 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00\n \
                    \ 81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65\n \
@@ -236,3 +236,22 @@ problem18 = solveMax (0, 0)
             | y >= maxY = 0
           solveMax (x,y) = getValue x y + localMax
               where localMax = max (solveMax (x, y + 1)) (solveMax (x+1, y+1))
+
+problem19 = sum $ zipWith comparator (dayCycler startDay) (dayRange 1901 2000)
+    where comparator weekday isFirst
+                    | weekday == 6 && isFirst = 1
+                    | otherwise = 0
+          weekDay start days = (start + days) `mod` 7 -- 0..6
+          startDay = weekDay 0 (daysInYear 1900) -- weekday of 1 Januray 1901
+          dayCycler start = drop start $ cycle [0..6]
+          dayRange start end
+                    | start > end = []
+                    | otherwise = yearList start ++ dayRange (start + 1) end
+                        where yearList year = if isLeapYear year
+                                              then dayMapper leapMonthDays
+                                              else dayMapper monthDays
+                              dayMapper = concatMap (\ d -> True : replicate (d - 1) False)
+          monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+          leapMonthDays = 31 : 29 : drop 2 monthDays
+          isLeapYear year = (year `mod` 4 == 0) && (year `mod` 100 /= 0 || (year `mod` 400) == 0)
+          daysInYear year = if isLeapYear year then 366 else 365
