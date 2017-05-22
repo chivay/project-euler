@@ -255,3 +255,8 @@ problem19 = sum $ zipWith comparator (dayCycler startDay) (dayRange 1901 2000)
           leapMonthDays = 31 : 29 : drop 2 monthDays
           isLeapYear year = (year `mod` 4 == 0) && (year `mod` 100 /= 0 || (year `mod` 400) == 0)
           daysInYear year = if isLeapYear year then 366 else 365
+
+-- Sum of digits of 100!
+problem20 = digitSum (product [1..100])
+    where digitSum 0 = 0
+          digitSum x = x `mod` 10 + digitSum (x `div` 10)
